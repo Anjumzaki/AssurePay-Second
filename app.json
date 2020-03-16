@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "AssurePay",
+    "slug": "assurepayfinal",
+    "privacy": "public",
+    "sdkVersion": "36.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "6.1.1",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#3f3fb9"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sposieapps.AssurePay",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses camera to have the option to add a photo as a background or wallpaper."
+      }
+    },
+    "android": {
+      "package": "com.sposieapps.AssurePay",
+      "versionCode": 5,
+      "permissions": ["CAMERA", "RECORD_AUDIO","READ_PHONE_STATE","READ_CONTACTS"]
+    },
+    "description": "",
+    "githubUrl": "https://github.com/Anjumzaki/AssurePay"
+  }
+}
