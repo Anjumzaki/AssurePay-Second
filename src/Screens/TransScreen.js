@@ -49,7 +49,8 @@ class MainScreen extends React.Component {
       payDate: new Date(),
       soldDate: "",
       userId: "",
-      loading: false
+      loading: false,
+      showDate:false
     };
   }
   login() {
@@ -171,9 +172,9 @@ class MainScreen extends React.Component {
             />
           </View>
           <Text style={{marginTop:15}}>Pay Date</Text>
-          <View style={styles.SectionStyle}>
+         
             
-            {Platform.OS == 'android' ?  <DatePicker
+            {Platform.OS == 'android' ?  <View style={styles.SectionStyle}>  <DatePicker
               style={[styles.forms, { paddingTop: -5 }]}
               date={this.state.payDate} //initial date from state
               mode="date" //The enum of date, datetime and timeQ
@@ -215,8 +216,20 @@ class MainScreen extends React.Component {
               onDateChange={payDate => {
                 this.setState({ payDate });
               }}
-            /> : <DatePicker
-            style={[styles.forms, { paddingTop: -5 }]}
+            />  </View>: 
+            <View style={{marginBottom:-10}}>
+            <TouchableOpacity onPress={()=>this.setState({showDate:true})
+            } style={styles.SectionStyle,[{}]}>
+            <Text
+              style={[styles.forms]}
+             
+           
+            >
+              {this.state.soldDate.dateString}
+              </Text>
+          </TouchableOpacity>
+          {this.state.showDate &&<DatePickerIOS
+           style={{paddingTop:5}}
             date={this.state.payDate} 
             //initial date from state
             mode="date" //The enum of date, datetime and timeQ
@@ -228,13 +241,7 @@ class MainScreen extends React.Component {
             showIcon={false}
            // minDate={this.state.soldDate.dateString}
             customStyles={{
-              dateIcon: {
-                position: "absolute",
-                left: 0,
-                top: 0,
-                bottom: 5,
-                marginLeft: 0
-              },
+             
               dateText: {
                 fontSize: 19,
                 color: "black"
@@ -242,9 +249,9 @@ class MainScreen extends React.Component {
               dateInput: {
                 borderWidth: 0,
                 placeholderTextColor: "black",
-                alignItems: "flex-start",
+               
                 color: "black",
-                position: "relative",
+              
                 paddingBottom: 0
               },
               dateTouchBody: {
@@ -258,8 +265,22 @@ class MainScreen extends React.Component {
             onDateChange={payDate => {
               this.setState({ payDate });
             }}
-          /> }
+          />
+          }
+          {this.state.showDate &&
+          <View style={{alignItems:'flex-end'}}>
+
+          <TouchableOpacity onPress={()=>this.setState({showDate:false})}>
+          <Text style={{padding:20,color:'blue'}}>Close</Text>
+         
+        </TouchableOpacity>
+        </View>
+          }
+          
           </View>
+          }
+
+         
 
           <View style={styles.SectionStyle}>
             <TextInput
@@ -289,7 +310,7 @@ class MainScreen extends React.Component {
               }}
               value={this.state.volume}
               placeholder="Volume"
-              keyboardType="number-pad"
+              keyboardType="decimal-pad"
               returnKeyType="next"
               onBlur={() => {
                 var calc;
@@ -338,7 +359,7 @@ class MainScreen extends React.Component {
               onChangeText={downPay => this.setState({ downPay })}
               value={this.state.downPay}
               placeholder="Downpayment %"
-              keyboardType="number-pad"
+              keyboardType="decimal-pad"
               returnKeyType="next"
             />
           </View>
@@ -392,7 +413,7 @@ class MainScreen extends React.Component {
                 }}
                 value={Math.round(this.state.spiffPer)}
                 placeholder="Spiff"
-                keyboardType="number-pad"
+                keyboardType="decimal-pad"
                 returnKeyType="next"
               />
               <Text style={{ fontSize: 22 }}>
@@ -440,7 +461,7 @@ class MainScreen extends React.Component {
                 }}
                 value={Math.round(this.state.commPer)}
                 placeholder="Commission "
-                keyboardType="number-pad"
+                keyboardType="decimal-pad" 
                 returnKeyType="next"
               />
               <Text style={{ fontSize: 22 }}>
@@ -487,7 +508,7 @@ class MainScreen extends React.Component {
                 }}
                 value={Math.round(this.state.bonusPer)}
                 placeholder="Bonus"
-                keyboardType="number-pad"
+                keyboardType="decimal-pad"
                 returnKeyType="next"
               />
 
@@ -545,7 +566,7 @@ class MainScreen extends React.Component {
                 }}
                 value={Math.round(this.state.pmdDeductionPer)}
                 placeholder="Podium/Mentor/Deduction"
-                keyboardType="number-pad"
+                keyboardType="decimal-pad"
                 returnKeyType="next"
               />
 
@@ -603,8 +624,8 @@ const styles = StyleSheet.create({
     fontFamily: "open-sans-bold",
     color: "black",
     borderRadius: 10,
-    height: 45,
-    marginTop: 10
+    marginTop: 10,
+    height:45
   },
 
   commSection: {
