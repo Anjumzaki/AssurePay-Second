@@ -2,9 +2,9 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 92335,
-  "expoServerNgrokUrl": "https://by-utz.anjumzaki.assurepay-second-master-2.exp.direct",
-  "packagerNgrokUrl": "https://packager.by-utz.anjumzaki.assurepay-second-master-2.exp.direct",
-  "ngrokPid": 92350,
+  "packagerPid": 144048,
+  "expoServerNgrokUrl": "https://by-utz.anjumzaki.assurepay-second.exp.direct",
+  "packagerNgrokUrl": "https://packager.by-utz.anjumzaki.assurepay-second.exp.direct",
+  "ngrokPid": 142304,
   "webpackServerPort": null
 }

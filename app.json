@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "AssurePay",
-    "slug": "assurepayfinal",
+    "slug": "assurefinalandroid",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -33,7 +33,12 @@
     "android": {
       "package": "com.sposieapps.AssurePay",
       "versionCode": 5,
-      "permissions": ["CAMERA", "RECORD_AUDIO","READ_PHONE_STATE","READ_CONTACTS"]
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "READ_PHONE_STATE",
+        "READ_CONTACTS"
+      ]
     },
     "description": "",
     "githubUrl": "https://github.com/Anjumzaki/AssurePay"

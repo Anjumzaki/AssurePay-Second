@@ -158,15 +158,19 @@ class MainScreen extends React.Component {
     });
   };
   render() {
-    var pay
-    if(this.state.payDate) {
-
-    
-    pay = this.state.payDate.getFullYear() + "-" + (this.state.payDate.getMonth()+1) +"-" + this.state.payDate.getDate() 
+    if(Platform.OS == "android" ) {   
+        pay = this.state.payDate
     }
     else{
-      pay = this.state.soldDate.dateString
+      var pay
+      if(this.state.payDate) {
+      pay = this.state.payDate.getFullYear() + "-" + (this.state.payDate.getMonth()+1) +"-" + this.state.payDate.getDate() 
+      }
+      else{
+        pay = this.state.soldDate.dateString
+      }
     }
+   
     return (
       <KeyboardAwareScrollView enableOnAndroid={true}>
         <View style={{ flex: 1, alignItems: "center", marginTop: 10 }}>
@@ -185,7 +189,7 @@ class MainScreen extends React.Component {
             <View style={styles.SectionStyle}>
               <DatePicker
                 style={[styles.forms, { paddingTop: -5 }]}
-                date={this.state.payDate} //initial date from state
+                date={this.state.payDate ? this.state.payDate : new Date(this.state.soldDate.dateString)} //initial date from state
                 mode="date" //The enum of date, datetime and timeQ
                 placeholder="Pay date"
                 allowFontScaling={false}
@@ -223,7 +227,7 @@ class MainScreen extends React.Component {
                   }
                 }}
                 onDateChange={payDate => {
-                  this.setState({ payDate });
+                  this.setState({ payDate : payDate });
                 }}
               />
             </View>
