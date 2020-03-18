@@ -75,7 +75,8 @@ export default class TransCard extends React.Component {
       "Dec"
     ];
     const saleDate =this.props.transc.soldDate;
-    const PayDate =this.props.transc.payDate;
+    const PayDate =new Date(this.props.transc.payDate);
+    var pay = PayDate.getFullYear() + "-" + (PayDate.getMonth()+1) +"-" + PayDate.getDate() 
    
     return (
       <Card style={{ marginLeft: 10, marginRight: 10, padding: 0 }}>
@@ -89,7 +90,7 @@ export default class TransCard extends React.Component {
           <View>
             <Text style={styles.head}>Pay Date: </Text>
             <Text style={styles.head1}>
-             {PayDate}
+             {pay}
             </Text>
           </View>
         </CardItem>

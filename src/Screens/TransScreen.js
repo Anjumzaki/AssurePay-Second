@@ -35,18 +35,18 @@ class MainScreen extends React.Component {
       downPay: "",
       spiff: "0.0",
       spiffType: "%",
-      spiffPer: -1,
+      spiffPer: 0,
       note: "",
       commission: "0.0",
-      commPer: -1,
+      commPer: 0,
       bonus: "0.0",
       commType: "%",
-      bonusPer: -1,
+      bonusPer: 0,
       bonusType: "%",
       pmdDeduction: 0,
       pmdDeductionPer: 0,
       pmdType: "%",
-      payDate: new Date(),
+      payDate: "",
       soldDate: "",
       userId: "",
       loading: false,
@@ -66,7 +66,7 @@ class MainScreen extends React.Component {
     return await Storage.getItem("userId");
   }
   componentDidMount() {
-    this.setState({ soldDate: this.props.navigation.getParam("sectedDate") });
+    this.setState({ soldDate: this.props.navigation.getParam("sectedDate")});
     var date = this.props.navigation.getParam("sectedDate").dateString;
     var year = new Date(date).getFullYear();
     var month = new Date(date).getMonth() + 1;
@@ -158,6 +158,15 @@ class MainScreen extends React.Component {
     });
   };
   render() {
+    var pay
+    if(this.state.payDate) {
+
+    
+    pay = this.state.payDate.getFullYear() + "-" + (this.state.payDate.getMonth()+1) +"-" + this.state.payDate.getDate() 
+    }
+    else{
+      pay = this.state.soldDate.dateString
+    }
     return (
       <KeyboardAwareScrollView enableOnAndroid={true}>
         <View style={{ flex: 1, alignItems: "center", marginTop: 10 }}>
@@ -225,13 +234,13 @@ class MainScreen extends React.Component {
                 style={(styles.SectionStyle, [{}])}
               >
                 <Text style={[styles.forms]}>
-                  {this.state.soldDate.dateString}
+                  {pay}
                 </Text>
               </TouchableOpacity>
               {this.state.showDate && (
                 <DatePickerIOS
                   style={{ paddingTop: 5 }}
-                  date={this.state.payDate}
+                  date={this.state.payDate ? this.state.payDate : new Date(this.state.soldDate.dateString)}
                   //initial date from state
                   mode="date" //The enum of date, datetime and timeQ
                   placeholder="Pay date"
