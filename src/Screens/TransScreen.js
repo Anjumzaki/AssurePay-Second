@@ -183,7 +183,8 @@ class MainScreen extends React.Component {
               returnKeyType="next"
             />
           </View>
-          <Text style={{ marginTop: 15 }}>Pay Date</Text>
+          {Platform.OS == "android" ? null:
+          <Text style={{ marginTop: 15 }}>Pay Date</Text>}
 
           {Platform.OS == "android" ? (
             <View style={styles.SectionStyle}>
