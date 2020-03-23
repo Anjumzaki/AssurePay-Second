@@ -90,7 +90,7 @@ export default class TransCard extends React.Component {
           <View>
             <Text style={styles.head}>Pay Date: </Text>
             <Text style={styles.head1}>
-             {pay}
+             {this.props.transc.payDate.slice(0,10)}
             </Text>
           </View>
         </CardItem>

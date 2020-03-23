@@ -304,9 +304,10 @@ class HomePage extends React.Component {
       var totalSales = 0;
       for (let i = 0; i < transes.length; i++) {
         if (
-          new Date(transes[i].soldDate).getMonth() == month &&
+          transes[i].soldDate.slice(5,7) == month+1 &&
           new Date(transes[i].soldDate).getFullYear() == year
         ) {
+         
           totalVolume += parseFloat(transes[i].volume);
           totalBonus += parseFloat(transes[i].bonus);
           totalCommission += parseFloat(transes[i].commission);

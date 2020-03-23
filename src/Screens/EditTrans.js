@@ -94,7 +94,9 @@ class EditTrans extends React.Component {
           "https://intense-harbor-45607.herokuapp.com/edit/trasc/" +
             this.state._id,
           {
-            payDate:this.state.payDate,
+            payDate:this.state.payDate.getFullYear() + "-" + (
+              this.state.payDate.getMonth() + 1 < 10 ?  "0" + (this.state.payDate.getMonth() + 1) : this.state.payDate.getMonth() + 1) + "-" + 
+              (this.state.payDate.getDate()  < 10 ?  "0" + (this.state.payDate.getDate()) : this.state.payDate.getDate() ),
             soldDate: this.state.soldDate.dateString,
             name: this.state.name,
             contact: this.state.contact,
@@ -128,7 +130,7 @@ class EditTrans extends React.Component {
         .catch(err => Alert.alert("Something Went Wrong!"));
     } else {
       if (!this.state.payDate) {
-        this.setState({ msg: "Please Enter Date" });
+        this.setState({ msg: "Please Select Date" });
       } else if (!this.state.name) {
         this.setState({ msg: "Please Enter Name" });
       } else if (!this.state.contact) {
@@ -150,7 +152,9 @@ class EditTrans extends React.Component {
   else{
     var pay
     if(this.state.payDate) {
-    pay = this.state.payDate.getFullYear() + "-" + (this.state.payDate.getMonth()+1) +"-" + this.state.payDate.getDate() 
+    pay = this.state.payDate.getFullYear() + "-" + (
+      this.state.payDate.getMonth() + 1 < 10 ?  "0" + (this.state.payDate.getMonth() + 1) : this.state.payDate.getMonth() + 1) + "-" + 
+      (this.state.payDate.getDate()  < 10 ?  "0" + (this.state.payDate.getDate()) : this.state.payDate.getDate() )
     }
     else{
       pay = this.state.soldDate.dateString

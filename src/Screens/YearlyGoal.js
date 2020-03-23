@@ -385,7 +385,7 @@ class YearlyGoal extends React.Component {
                   </View>
                 </View>
                 {/* <View style={{ marginLeft: 10, marginRight: 10, padding: 0 ,backgroundColor:'transparent'}}> */}
-                <CardItem style={styles.cardHead1}>
+               
                   <TouchableHighlight
                     onPress={() => {
                       this.setModalVisible(true);
@@ -393,20 +393,23 @@ class YearlyGoal extends React.Component {
                   >
                     <View
                       style={{
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        alignContent: "center",
-                        alignItems: "center"
+                      flexDirection:'row',
+                      
+                      alignContent:'center',
+                      paddingHorizontal:10,
+                      paddingLeft:34,
+                      paddingBottom:10
+                     
                       }}
                     >
                       <Text
                         style={{
                           fontSize: 18,
                           fontWeight: "bold",
-                          width: Dimensions.get("window").width / 3 + 30
+                          width: Dimensions.get("window").width / 2
                         }}
                       >
-                        Yeary Volume Goal:{" "}
+                        Yeary Volume Goal: 
                       </Text>
                       <Text style={styles.head1}>
                         $
@@ -416,7 +419,7 @@ class YearlyGoal extends React.Component {
                       </Text>
                     </View>
                   </TouchableHighlight>
-                </CardItem>
+                
                 <CardItem style={styles.cardHead1}>
                   <View style={{ flexDirection: "row" }}>
                     <Text style={styles.head}>Total # of sales: </Text>
