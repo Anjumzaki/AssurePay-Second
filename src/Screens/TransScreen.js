@@ -9,7 +9,7 @@ import {
   Platform,
   ActivityIndicator,
   DatePickerIOS,
-  PickerIOSItem,
+  PickerIOSItem
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -21,7 +21,7 @@ import { bindActionCreators } from "redux";
 import { userAsync } from "../store/actions";
 import { connect } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
-import { Icon, Picker } from 'native-base'
+import { Icon, Picker } from "native-base";
 class MainScreen extends React.Component {
   static navigationOptions = {
     header: null
@@ -75,11 +75,11 @@ class MainScreen extends React.Component {
     axios
       .get(
         "https://intense-harbor-45607.herokuapp.com/get/fixedAmount/" +
-        this.props.user +
-        "/" +
-        year.toString() +
-        "/" +
-        month.toString()
+          this.props.user +
+          "/" +
+          year.toString() +
+          "/" +
+          month.toString()
       )
       .then(resp => {
         if (resp.data !== null) {
@@ -103,7 +103,7 @@ class MainScreen extends React.Component {
       this.state.contact &&
       this.state.volume &&
       this.state.downPay < 101
-      // this.state.spiff &&
+      // this.state.spiff &&a
       // this.state.note &&
       // this.state.commPer >= 0 &&
       // this.state.bonusPer >= 0 &&
@@ -111,9 +111,16 @@ class MainScreen extends React.Component {
     ) {
       axios
         .post("https://intense-harbor-45607.herokuapp.com/post/transaction", {
-          payDate: this.state.payDate.getFullYear() + "-" + (
-            this.state.payDate.getMonth() + 1 < 10 ? "0" + (this.state.payDate.getMonth() + 1) : this.state.payDate.getMonth() + 1) + "-" +
-            (this.state.payDate.getDate() < 10 ? "0" + (this.state.payDate.getDate()) : this.state.payDate.getDate()),
+          payDate:
+            this.state.payDate.getFullYear() +
+            "-" +
+            (this.state.payDate.getMonth() + 1 < 10
+              ? "0" + (this.state.payDate.getMonth() + 1)
+              : this.state.payDate.getMonth() + 1) +
+            "-" +
+            (this.state.payDate.getDate() < 10
+              ? "0" + this.state.payDate.getDate()
+              : this.state.payDate.getDate()),
           soldDate: this.state.soldDate.dateString,
           name: this.state.name,
           contact: this.state.contact,
@@ -163,17 +170,22 @@ class MainScreen extends React.Component {
   };
   render() {
     if (Platform.OS == "android") {
-      pay = this.state.payDate
-    }
-    else {
-      var pay
+      pay = this.state.payDate;
+    } else {
+      var pay;
       if (this.state.payDate) {
-        pay = this.state.payDate.getFullYear() + "-" + (
-          this.state.payDate.getMonth() + 1 < 10 ? "0" + (this.state.payDate.getMonth() + 1) : this.state.payDate.getMonth() + 1) + "-" +
-          (this.state.payDate.getDate() < 10 ? "0" + (this.state.payDate.getDate()) : this.state.payDate.getDate())
-      }
-      else {
-        pay = this.state.soldDate.dateString
+        pay =
+          this.state.payDate.getFullYear() +
+          "-" +
+          (this.state.payDate.getMonth() + 1 < 10
+            ? "0" + (this.state.payDate.getMonth() + 1)
+            : this.state.payDate.getMonth() + 1) +
+          "-" +
+          (this.state.payDate.getDate() < 10
+            ? "0" + this.state.payDate.getDate()
+            : this.state.payDate.getDate());
+      } else {
+        pay = this.state.soldDate.dateString;
       }
     }
 
@@ -189,14 +201,19 @@ class MainScreen extends React.Component {
               returnKeyType="next"
             />
           </View>
-          {Platform.OS == "android" ? null :
-            <Text style={{ marginTop: 15 }}>Pay Date</Text>}
+          {Platform.OS == "android" ? null : (
+            <Text style={{ marginTop: 15 }}>Pay Date</Text>
+          )}
 
           {Platform.OS == "android" ? (
             <View style={styles.SectionStyle}>
               <DatePicker
                 style={[styles.forms, { paddingTop: -5 }]}
-                date={this.state.payDate ? this.state.payDate : new Date(this.state.soldDate.dateString)} //initial date from state
+                date={
+                  this.state.payDate
+                    ? this.state.payDate
+                    : new Date(this.state.soldDate.dateString)
+                } //initial date from state
                 mode="date" //The enum of date, datetime and timeQ
                 placeholder="Pay date"
                 allowFontScaling={false}
@@ -239,65 +256,67 @@ class MainScreen extends React.Component {
               />
             </View>
           ) : (
-              <View style={{ marginBottom: -10 }}>
-                <TouchableOpacity
-                  onPress={() => this.setState({ showDate: true })}
-                  style={(styles.SectionStyle, [{}])}
-                >
-                  <Text style={[styles.forms]}>
-                    {pay}
-                  </Text>
-                </TouchableOpacity>
-                {this.state.showDate && (
-                  <DatePickerIOS
-                    style={{ paddingTop: 5 }}
-                    date={this.state.payDate ? this.state.payDate : new Date(this.state.soldDate.dateString)}
-                    //initial date from state
-                    mode="date" //The enum of date, datetime and timeQ
-                    placeholder="Pay date"
-                    allowFontScaling={false}
-                    format="YYYY-MM-DD"
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
-                    showIcon={false}
-                    // minDate={this.state.soldDate.dateString}
-                    customStyles={{
-                      dateText: {
-                        fontSize: 19,
-                        color: "black"
-                      },
-                      dateInput: {
-                        borderWidth: 0,
-                        placeholderTextColor: "black",
+            <View style={{ marginBottom: -10 }}>
+              <TouchableOpacity
+                onPress={() => this.setState({ showDate: true })}
+                style={(styles.SectionStyle, [{}])}
+              >
+                <Text style={[styles.forms]}>{pay}</Text>
+              </TouchableOpacity>
+              {this.state.showDate && (
+                <DatePickerIOS
+                  style={{ paddingTop: 5 }}
+                  date={
+                    this.state.payDate
+                      ? this.state.payDate
+                      : new Date(this.state.soldDate.dateString)
+                  }
+                  //initial date from state
+                  mode="date" //The enum of date, datetime and timeQ
+                  placeholder="Pay date"
+                  allowFontScaling={false}
+                  format="YYYY-MM-DD"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  showIcon={false}
+                  // minDate={this.state.soldDate.dateString}
+                  customStyles={{
+                    dateText: {
+                      fontSize: 19,
+                      color: "black"
+                    },
+                    dateInput: {
+                      borderWidth: 0,
+                      placeholderTextColor: "black",
 
-                        color: "black",
+                      color: "black",
 
-                        paddingBottom: 0
-                      },
-                      dateTouchBody: {
-                        color: "black"
-                      },
-                      placeholderText: {
-                        fontSize: 19,
-                        color: "gray"
-                      }
-                    }}
-                    onDateChange={payDate => {
-                      this.setState({ payDate });
-                    }}
-                  />
-                )}
-                {this.state.showDate && (
-                  <View style={{ alignItems: "flex-end" }}>
-                    <TouchableOpacity
-                      onPress={() => this.setState({ showDate: false })}
-                    >
-                      <Text style={{ padding: 20, color: "blue" }}>Close</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              </View>
-            )}
+                      paddingBottom: 0
+                    },
+                    dateTouchBody: {
+                      color: "black"
+                    },
+                    placeholderText: {
+                      fontSize: 19,
+                      color: "gray"
+                    }
+                  }}
+                  onDateChange={payDate => {
+                    this.setState({ payDate });
+                  }}
+                />
+              )}
+              {this.state.showDate && (
+                <View style={{ alignItems: "flex-end" }}>
+                  <TouchableOpacity
+                    onPress={() => this.setState({ showDate: false })}
+                  >
+                    <Text style={{ padding: 20, color: "blue" }}>Close</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+          )}
 
           <View style={styles.SectionStyle}>
             <TextInput
@@ -405,7 +424,7 @@ class MainScreen extends React.Component {
                   iosHeader="Select Type"
                   iosIcon={<Icon name="arrow-down"></Icon>}
                   selectedValue={this.state.spiffType}
-                  onValueChange={(itemValue) =>
+                  onValueChange={itemValue =>
                     this.setState({
                       spiffType: itemValue,
                       spiff: "",
@@ -443,10 +462,10 @@ class MainScreen extends React.Component {
                 style={{
                   width: 80,
                   height: 50,
-                  justifyContent: 'space-evenly',
-                  flexDirection: 'row',
-                  alignContent: 'center',
-                  alignItems: 'center'
+                  justifyContent: "space-evenly",
+                  flexDirection: "row",
+                  alignContent: "center",
+                  alignItems: "center"
                 }}
               >
                 <RNPickerSelect
@@ -455,7 +474,6 @@ class MainScreen extends React.Component {
                     { label: "%", value: "%" },
                     { label: "Fixed", value: "Fixed" }
                   ]}
-
                   onValueChange={(itemValue, itemIndex) =>
                     this.setState({
                       commType: itemValue,
@@ -464,8 +482,7 @@ class MainScreen extends React.Component {
                     })
                   }
                 />
-
-                }
+                
               </View>
               <TextInput
                 style={{ width: 100, padding: 10 }}
@@ -619,8 +636,8 @@ class MainScreen extends React.Component {
               {this.state.loading ? (
                 <ActivityIndicator color="white" />
               ) : (
-                  <Text style={{ color: "white" }}>Save</Text>
-                )}
+                <Text style={{ color: "white" }}>Save</Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>
