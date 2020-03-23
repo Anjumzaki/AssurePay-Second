@@ -395,7 +395,7 @@ class MainScreen extends React.Component {
               <Text style={styles.perText}>Spiff</Text>
               <View
                 style={{
-                  width: 80,
+               
                   height: 50,
                   justifyContent: "center"
                 }}
@@ -414,7 +414,7 @@ class MainScreen extends React.Component {
                   }
                 >
                   <Picker.Item label="%" value="%" />
-                  <Picker.Item label="%" value="%" />
+                  <Picker.Item label="Fixed" value="Fixed" />
                 </Picker>
               </View>
               <TextInput
@@ -441,31 +441,31 @@ class MainScreen extends React.Component {
               <Text style={styles.perText}>Commission</Text>
               <View
                 style={{
-                  width: 80,
+                 
                   height: 50,
-                  justifyContent: 'space-evenly',
-                  flexDirection: 'row',
-                  alignContent: 'center',
-                  alignItems: 'center'
+                  justifyContent: 'center',
+          
                 }}
               >
-                <RNPickerSelect
-                  value={this.state.commType}
-                  items={[
-                    { label: "%", value: "%" },
-                    { label: "Fixed", value: "Fixed" }
-                  ]}
-
-                  onValueChange={(itemValue, itemIndex) =>
+                <Picker
+                  mode="dropdown"
+                  iosHeader="Select Type"
+                  iosIcon={<Icon name="arrow-down"></Icon>}
+                  selectedValue={this.state.commType}
+                  onValueChange={(itemValue) =>
                     this.setState({
                       commType: itemValue,
                       commission: "",
                       commPer: ""
                     })
                   }
-                />
+                >
+                  <Picker.Item label="%" value="%" />
+                  <Picker.Item label="Fixed" value="Fixed" />
+                </Picker>
+               
 
-                }
+                
               </View>
               <TextInput
                 style={{ width: 100, padding: 10 }}
@@ -498,25 +498,27 @@ class MainScreen extends React.Component {
               <Text style={styles.perText}>Bonus</Text>
               <View
                 style={{
-                  width: 80,
+                
                   height: 50,
                   justifyContent: "center"
                 }}
               >
-                <RNPickerSelect
-                  value={this.state.bonusType}
-                  onValueChange={(itemValue, itemIndex) =>
+              <Picker
+                  mode="dropdown"
+                  iosHeader="Select Type"
+                  iosIcon={<Icon name="arrow-down"></Icon>}
+                  selectedValue={this.state.bonusType}
+                  onValueChange={(itemValue) =>
                     this.setState({
                       bonusType: itemValue,
                       bonus: "",
                       bonusPer: ""
                     })
                   }
-                  items={[
-                    { label: "%", value: "%" },
-                    { label: "Fixed", value: "Fixed" }
-                  ]}
-                />
+                >
+                  <Picker.Item label="%" value="%" />
+                  <Picker.Item label="Fixed" value="Fixed" />
+                </Picker>
               </View>
               <TextInput
                 style={{ width: 100, padding: 10 }}
@@ -543,22 +545,28 @@ class MainScreen extends React.Component {
               <Text>PMD</Text>
               <View
                 style={{
-                  width: 80,
+                
                   height: 50,
 
                   justifyContent: "center"
                 }}
               >
-                <RNPickerSelect
-                  value={this.state.pmdType}
-                  items={[
-                    { label: "%", value: "%" },
-                    { label: "Fixed", value: "Fixed" }
-                  ]}
-                  onValueChange={(itemValue, itemIndex) =>
-                    this.setState({ pmdType: itemValue })
+                
+                <Picker
+                  mode="dropdown"
+                  iosHeader="Select Type"
+                  iosIcon={<Icon name="arrow-down"></Icon>}
+                  selectedValue={this.state.pmdType}
+                  onValueChange={(itemValue) =>
+                    this.setState({
+                      pmdType: itemValue,
+                     
+                    })
                   }
-                />
+                >
+                  <Picker.Item label="%" value="%" />
+                  <Picker.Item label="Fixed" value="Fixed" />
+                </Picker>
               </View>
               <TextInput
                 style={{
