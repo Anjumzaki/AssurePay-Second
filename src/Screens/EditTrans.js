@@ -18,6 +18,7 @@ import { bindActionCreators } from "redux";
 import { userAsync } from "../store/actions";
 import { connect } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
+import { Icon, Picker } from 'native-base'
 class EditTrans extends React.Component {
   static navigationOptions = {
     header: null
@@ -388,26 +389,28 @@ class EditTrans extends React.Component {
               <Text style={styles.perText}>Spiff</Text>
               <View
                 style={{
-                  width: 80,
-                  height: 50
+               
+                  height: 50,
+                  justifyContent: "center"
                 }}
               >
-                <RNPickerSelect
-                  value={this.state.spiffType}
-                  onValueChange={(itemValue, itemIndex) =>
+                <Picker
+                  mode="dropdown"
+                  iosHeader="Select Type"
+                  iosIcon={<Icon name="arrow-down"></Icon>}
+                  selectedValue={this.state.spiffType}
+                  onValueChange={(itemValue) =>
                     this.setState({
                       spiffType: itemValue,
                       spiff: "",
                       spiffPer: ""
                     })
                   }
-                  items={[
-                    { label: "%", value: "%" },
-                    { label: "Fixed", value: "Fixed" }
-                  ]}
-                />
+                >
+                  <Picker.Item label="%" value="%" />
+                  <Picker.Item label="Fixed" value="Fixed" />
+                </Picker>
               </View>
-
               <TextInput
                 style={{ width: 100, padding: 10 }}
                 onChangeText={spiffPer => {
@@ -421,7 +424,7 @@ class EditTrans extends React.Component {
                 }}
                 value={Math.round(this.state.spiffPer)}
                 placeholder="Spiff"
-                keyboardType="number-pad"
+                keyboardType="decimal-pad"
                 returnKeyType="next"
               />
               <Text style={{ fontSize: 22 }}>
@@ -432,24 +435,31 @@ class EditTrans extends React.Component {
               <Text style={styles.perText}>Commission</Text>
               <View
                 style={{
-                  width: 80,
-                  height: 50
+                 
+                  height: 50,
+                  justifyContent: 'center',
+          
                 }}
               >
-                <RNPickerSelect
-                  value={this.state.commType}
-                  items={[
-                    { label: "%", value: "%" },
-                    { label: "Fixed", value: "Fixed" }
-                  ]}
-                  onValueChange={(itemValue, itemIndex) =>
+                <Picker
+                  mode="dropdown"
+                  iosHeader="Select Type"
+                  iosIcon={<Icon name="arrow-down"></Icon>}
+                  selectedValue={this.state.commType}
+                  onValueChange={(itemValue) =>
                     this.setState({
                       commType: itemValue,
                       commission: "",
                       commPer: ""
                     })
                   }
-                />
+                >
+                  <Picker.Item label="%" value="%" />
+                  <Picker.Item label="Fixed" value="Fixed" />
+                </Picker>
+               
+
+                
               </View>
               <TextInput
                 style={{ width: 100, padding: 10 }}
@@ -468,7 +478,7 @@ class EditTrans extends React.Component {
                 }}
                 value={Math.round(this.state.commPer)}
                 placeholder="Commission "
-                keyboardType="number-pad"
+                keyboardType="decimal-pad"
                 returnKeyType="next"
               />
               <Text style={{ fontSize: 22 }}>
@@ -482,24 +492,27 @@ class EditTrans extends React.Component {
               <Text style={styles.perText}>Bonus</Text>
               <View
                 style={{
-                  width: 80,
-                  height: 50
+                
+                  height: 50,
+                  justifyContent: "center"
                 }}
               >
-                <RNPickerSelect
-                  value={this.state.bonusType}
-                  onValueChange={(itemValue, itemIndex) =>
+              <Picker
+                  mode="dropdown"
+                  iosHeader="Select Type"
+                  iosIcon={<Icon name="arrow-down"></Icon>}
+                  selectedValue={this.state.bonusType}
+                  onValueChange={(itemValue) =>
                     this.setState({
                       bonusType: itemValue,
                       bonus: "",
                       bonusPer: ""
                     })
                   }
-                  items={[
-                    { label: "%", value: "%" },
-                    { label: "Fixed", value: "Fixed" }
-                  ]}
-                />
+                >
+                  <Picker.Item label="%" value="%" />
+                  <Picker.Item label="Fixed" value="Fixed" />
+                </Picker>
               </View>
               <TextInput
                 style={{ width: 100, padding: 10 }}
@@ -514,7 +527,7 @@ class EditTrans extends React.Component {
                 }}
                 value={Math.round(this.state.bonusPer)}
                 placeholder="Bonus"
-                keyboardType="number-pad"
+                keyboardType="decimal-pad"
                 returnKeyType="next"
               />
 
@@ -522,68 +535,70 @@ class EditTrans extends React.Component {
                 {this.state.bonus >= 0 ? Math.round(this.state.bonus) : "0.0"}
               </Text>
             </View>
-            <View>
-              <View style={styles.commSection}>
-                <Text>PMD</Text>
-                <View
-                  style={{
-                    width: 80,
-                    height: 50,
-                    textAlign: "right",
-                    justifyContent: "flex-end"
-                  }}
-                >
-                  <RNPickerSelect
-                    value={this.state.pmdType}
-                    items={[
-                      { label: "%", value: "%" },
-                      { label: "Fixed", value: "Fixed" }
-                    ]}
-                    onValueChange={(itemValue, itemIndex) =>
-                      this.setState({ pmdType: itemValue })
-                    }
-                  />
-                </View>
-                <TextInput
-                  style={{
-                    textAlign: "center",
-                    fontSize:10
-                  }}
-                  placeholderText={{ fontSize: 8 }}
-                  
-                  onChangeText={pmdDeductionPer => {
-                    var calc;
-                    if (this.state.pmdType === "%") {
-                      calc = (pmdDeductionPer * this.state.volume) / 100;
-                      this.setState({
-                        commission: this.state.commission1 - calc
-                      });
-                      if (this.state.commission < 0) {
-                        this.setState({
-                          pmdDeductionPer: 0,
-                          msg: "Commission cannot be less than zero"
-                        });
-                      }
-                    } else {
-                      calc = pmdDeductionPer;
-                      this.setState({
-                        commission: this.state.commission1 - calc
-                      });
-                    }
-                    this.setState({ pmdDeductionPer, pmdDeduction: calc });
-                  }}
-                  value={Math.round(this.state.pmdDeductionPer)}
-                  placeholder="Podium/Mentor/Deduction"
-                  keyboardType="number-pad"
-                  returnKeyType="next"
-                />
+            <View style={styles.commSection}>
+              <Text>PMD</Text>
+              <View
+                style={{
+                
+                  height: 50,
 
-                <Text >
-                  {this.state.pmdDeduction >= 0
-                    ? this.state.pmdDeduction
-                    : "0.0 $"}
-                </Text>
+                  justifyContent: "center"
+                }}
+              >
+                
+                <Picker
+                  mode="dropdown"
+                  iosHeader="Select Type"
+                  iosIcon={<Icon name="arrow-down"></Icon>}
+                  selectedValue={this.state.pmdType}
+                  onValueChange={(itemValue) =>
+                    this.setState({
+                      pmdType: itemValue,
+                     
+                    })
+                  }
+                >
+                  <Picker.Item label="%" value="%" />
+                  <Picker.Item label="Fixed" value="Fixed" />
+                </Picker>
               </View>
+              <TextInput
+                style={{
+                  textAlign: "center"
+                }}
+                placeholderText={{ fontSize: 10 }}
+                onChangeText={pmdDeductionPer => {
+                  var calc;
+                  if (this.state.pmdType === "%") {
+                    calc = (pmdDeductionPer * this.state.volume) / 100;
+                    this.setState({
+                      commission: this.state.commission1 - calc
+                    });
+                    if (this.state.commission < 0) {
+                      this.setState({
+                        pmdDeductionPer: 0,
+                        msg: "Commission cannot be less than zero"
+                      });
+                    }
+                  } else {
+                    calc = pmdDeductionPer;
+                    this.setState({
+                      commission: this.state.commission1 - calc
+                    });
+                  }
+                  this.setState({ pmdDeductionPer, pmdDeduction: calc });
+                }}
+                value={Math.round(this.state.pmdDeductionPer)}
+                placeholder="Podium/Mentor/Deduction"
+                keyboardType="decimal-pad"
+                returnKeyType="next"
+              />
+
+              <Text style={{ fontSize: 22 }}>
+                {this.state.pmdDeduction >= 0
+                  ? this.state.pmdDeduction
+                  : "0.0 $"}
+              </Text>
             </View>
           </View>
           <View>
