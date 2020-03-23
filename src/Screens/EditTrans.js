@@ -95,9 +95,7 @@ class EditTrans extends React.Component {
           "https://intense-harbor-45607.herokuapp.com/edit/trasc/" +
             this.state._id,
           {
-            payDate:this.state.payDate.getFullYear() + "-" + (
-              this.state.payDate.getMonth() + 1 < 10 ?  "0" + (this.state.payDate.getMonth() + 1) : this.state.payDate.getMonth() + 1) + "-" + 
-              (this.state.payDate.getDate()  < 10 ?  "0" + (this.state.payDate.getDate()) : this.state.payDate.getDate() ),
+            payDate:this.state.payDate,
             soldDate: this.state.soldDate.dateString,
             name: this.state.name,
             contact: this.state.contact,
