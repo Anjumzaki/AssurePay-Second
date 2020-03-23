@@ -32,7 +32,7 @@
     },
     "android": {
       "package": "com.sposieapps.AssurePay",
-      "versionCode": 5,
+      "versionCode": 6,
       "permissions": [
         "CAMERA",
         "RECORD_AUDIO",
