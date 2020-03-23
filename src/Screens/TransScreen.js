@@ -8,7 +8,8 @@ import {
   Alert,
   Platform,
   ActivityIndicator,
-  DatePickerIOS
+  DatePickerIOS,
+  PickerIOSItem,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -20,6 +21,7 @@ import { bindActionCreators } from "redux";
 import { userAsync } from "../store/actions";
 import { connect } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
+import { Icon, Picker } from 'native-base'
 class MainScreen extends React.Component {
   static navigationOptions = {
     header: null
@@ -110,8 +112,8 @@ class MainScreen extends React.Component {
       axios
         .post("https://intense-harbor-45607.herokuapp.com/post/transaction", {
           payDate: this.state.payDate.getFullYear() + "-" + (
-            this.state.payDate.getMonth() + 1 < 10 ?  "0" + (this.state.payDate.getMonth() + 1) : this.state.payDate.getMonth() + 1) + "-" + 
-            (this.state.payDate.getDate()  < 10 ?  "0" + (this.state.payDate.getDate()) : this.state.payDate.getDate() ),
+            this.state.payDate.getMonth() + 1 < 10 ? "0" + (this.state.payDate.getMonth() + 1) : this.state.payDate.getMonth() + 1) + "-" +
+            (this.state.payDate.getDate() < 10 ? "0" + (this.state.payDate.getDate()) : this.state.payDate.getDate()),
           soldDate: this.state.soldDate.dateString,
           name: this.state.name,
           contact: this.state.contact,
@@ -167,8 +169,8 @@ class MainScreen extends React.Component {
       var pay
       if (this.state.payDate) {
         pay = this.state.payDate.getFullYear() + "-" + (
-          this.state.payDate.getMonth() + 1 < 10 ?  "0" + (this.state.payDate.getMonth() + 1) : this.state.payDate.getMonth() + 1) + "-" + 
-          (this.state.payDate.getDate()  < 10 ?  "0" + (this.state.payDate.getDate()) : this.state.payDate.getDate() )
+          this.state.payDate.getMonth() + 1 < 10 ? "0" + (this.state.payDate.getMonth() + 1) : this.state.payDate.getMonth() + 1) + "-" +
+          (this.state.payDate.getDate() < 10 ? "0" + (this.state.payDate.getDate()) : this.state.payDate.getDate())
       }
       else {
         pay = this.state.soldDate.dateString
@@ -398,22 +400,23 @@ class MainScreen extends React.Component {
                   justifyContent: "center"
                 }}
               >
-                <RNPickerSelect
-                  value={this.state.spiffType}
-                  onValueChange={(itemValue, itemIndex) =>
+                <Picker
+                  mode="dropdown"
+                  iosHeader="Select Type"
+                  iosIcon={<Icon name="arrow-down"></Icon>}
+                  selectedValue={this.state.spiffType}
+                  onValueChange={(itemValue) =>
                     this.setState({
                       spiffType: itemValue,
                       spiff: "",
                       spiffPer: ""
                     })
                   }
-                  items={[
-                    { label: "%", value: "%" },
-                    { label: "Fixed", value: "Fixed" }
-                  ]}
-                />
+                >
+                  <Picker.Item label="%" value="%" />
+                  <Picker.Item label="%" value="%" />
+                </Picker>
               </View>
-
               <TextInput
                 style={{ width: 100, padding: 10 }}
                 onChangeText={spiffPer => {
@@ -440,7 +443,10 @@ class MainScreen extends React.Component {
                 style={{
                   width: 80,
                   height: 50,
-                  justifyContent: "center"
+                  justifyContent: 'space-evenly',
+                  flexDirection: 'row',
+                  alignContent: 'center',
+                  alignItems: 'center'
                 }}
               >
                 <RNPickerSelect
@@ -449,6 +455,7 @@ class MainScreen extends React.Component {
                     { label: "%", value: "%" },
                     { label: "Fixed", value: "Fixed" }
                   ]}
+
                   onValueChange={(itemValue, itemIndex) =>
                     this.setState({
                       commType: itemValue,
@@ -457,6 +464,8 @@ class MainScreen extends React.Component {
                     })
                   }
                 />
+
+                }
               </View>
               <TextInput
                 style={{ width: 100, padding: 10 }}
