@@ -6,7 +6,8 @@ import {
   TextInput,
   Dimensions,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
+  AsyncStorage
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -17,6 +18,7 @@ import Storage from "../Storage";
 import { bindActionCreators } from "redux";
 import { userAsync } from "../store/actions";
 import { connect } from "react-redux";
+import { CheckBox, Body } from "native-base";
 
 class Login extends React.Component {
   static navigationOptions = {
@@ -28,28 +30,53 @@ class Login extends React.Component {
       userName: "",
       Password: "",
       msg: "",
-      loading: false
+      loading: false,
+      checked: false,
+      user: "",
+      check: "",
+      pass: "",
+      pin: "",
+      pinned: ""
     };
   }
-  async setId() {
-    await Storage.setItem("userId", { userId: response.data.response._id });
+
+ 
+  async componentDidMount() {
+    let user;
+    let pass;
+    let check;
+    let pinned;
+    try {
+      user = await AsyncStorage.getItem("username");
+      pass = await AsyncStorage.getItem("password");
+      check = await AsyncStorage.getItem("checked");
+      pinned = await AsyncStorage.getItem("pin");
+    } catch (e) {}
+    console.log(user);
+    console.log(check);
+    console.log(pass);
+    console.log(pinned, "pin");
+    this.setState({
+      user,
+      check,
+      pass,
+      pinned
+    });
   }
   login = () => {
     if (this.state.userName) {
-      // if (this.state.userName.length > 5) {
       if (this.state.Password) {
+        AsyncStorage.setItem("username", this.state.userName);
+        AsyncStorage.setItem("password", this.state.Password);
+        AsyncStorage.setItem("checked", this.state.checked.toString());
         axios
           .post("https://intense-harbor-45607.herokuapp.com/login", {
             userName: this.state.userName,
             password: this.state.Password
           })
           .then(response => {
-            // this.setId();
             this.props.userAsync(response.data.response._id);
             if (response.data.resp === "match") {
-              // this.props.navigation.navigate('MainTabs', {
-              //     userId: response.data.response._id
-              // })
               this.props.navigation.dispatch(
                 StackActions.reset({
                   index: 0,
@@ -60,37 +87,66 @@ class Login extends React.Component {
               );
               this.setState({ loading: false });
             } else if (response.data.resp === "wrong") {
-              this.setState({ msg: "password is incorrect" });
+              this.setState({ msg: "password is incorrect", loading: false });
             }
           })
           .catch(error => {
-            this.setState({ msg: "login info is incorrect" });
+            this.setState({ msg: "login info is incorrect", loading: false });
           });
-        // this.props.navigation.navigate('MainTabs')
-        // this.props.navigation.dispatch(StackActions.reset({
-        //     index: 0,
-        //     actions: [NavigationActions.navigate({ routeName: 'MainTabs' })],
-        // }))
       } else {
         this.setState({
-          msg: "Please enter your Password"
+          msg: "Please enter your Password",
+          loading: false
         });
       }
-    }
-    // else {
-    //     this.setState({
-    //         msg: 'User Name have to be more than 6 characters'
-    //     })
-    // }
-    // }
-    else {
+    } else {
       this.setState({
-        msg: "Please enter your Username"
+        msg: "Please enter your Username",
+        loading: false
       });
     }
     this.setState({
       loading: false
     });
+  };
+  handlePin = pin => {
+    if (pin == this.state.pinned) {
+      this.setState({
+        pinLoading:true
+      })
+      axios
+      .post("https://intense-harbor-45607.herokuapp.com/login", {
+        userName: this.state.user,
+        password: this.state.pass
+      })
+      .then(response => {
+        this.props.userAsync(response.data.response._id);
+        if (response.data.resp === "match") {
+          this.props.navigation.dispatch(
+            StackActions.reset({
+              index: 0,
+              actions: [
+                NavigationActions.navigate({ routeName: "MainTabs" })
+              ]
+            })
+          );
+          this.setState({ loading: false });
+        } else if (response.data.resp === "wrong") {
+          this.setState({ msg: "password is incorrect", loading: false });
+        }
+      })
+      .catch(error => {
+        this.setState({ msg: "login info is incorrect", loading: false });
+      });
+    }
+    if (pin.length == 4 && pin !== this.state.pinned) {
+      alert("Incorrect Pin");
+    }
+    if (pin.length < 5) {
+      this.setState({
+        pin
+      });
+    }
   };
   render() {
     return (
@@ -99,80 +155,140 @@ class Login extends React.Component {
         style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
       >
         <KeyboardAwareScrollView enableOnAndroid={true}>
-          <View
-            style={{
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              height: Dimensions.get("window").height - 70
-            }}
-          >
-            <View style={styles.SectionStyle}>
-              <TextInput
-                style={styles.forms}
-                onChangeText={userName => this.setState({ userName })}
-                value={this.state.userName}
-                placeholder="User Name"
-                keyboardType="default"
-                returnKeyType="next"
-              />
-            </View>
-            <View style={styles.SectionStyle}>
-              <TextInput
-                style={styles.forms}
-                onChangeText={Password => this.setState({ Password })}
-                value={this.state.Password}
-                placeholder="Password"
-                keyboardType="default"
-                returnKeyType="next"
-                secureTextEntry={true}
-              />
-            </View>
+          {this.state.check == "true" ? (
+           <View
+           style={{
+             flex: 1,
+             alignItems: "center",
+             justifyContent: "center",
+             height: Dimensions.get("window").height - 70
+           }}
+         >
+           {this.state.pinLoading ? 
+            <ActivityIndicator size="large" color="#ff1358" />
+           :
+           <View style={styles.SectionStyle}>
+             <TextInput
+               style={[styles.forms, { textAlign: "center" }]}
+               onChangeText={pin => this.handlePin(pin)}
+               value={this.state.pin}
+               placeholder="4 digit pin"
+               keyboardType="number-pad"
+               returnKeyType="next"
+             />
+           </View>
+
+           }
+           <View style={{ flexDirection: "row", marginTop: 15 }}>
+             <TouchableOpacity
+               onPress={() => this.setState({ check: "false" })}
+             >
+               <Text style={styles.reg}>Login Instead</Text>
+             </TouchableOpacity>
+           </View>
+         </View>
+          ) : (
             <View>
-              <Text
+            <View
+              style={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                height: Dimensions.get("window").height - 70
+              }}
+            >
+              <View style={styles.SectionStyle}>
+                <TextInput
+                  style={styles.forms}
+                  onChangeText={userName => this.setState({ userName })}
+                  value={this.state.userName}
+                  placeholder="User Name"
+                  keyboardType="default"
+                  returnKeyType="next"
+                />
+              </View>
+              <View style={styles.SectionStyle}>
+                <TextInput
+                  style={styles.forms}
+                  onChangeText={Password => this.setState({ Password })}
+                  value={this.state.Password}
+                  placeholder="Password"
+                  keyboardType="default"
+                  returnKeyType="next"
+                  secureTextEntry={true}
+                />
+              </View>
+
+              <View
                 style={{
-                  fontWeight: "bold",
-                  color: "#ff1358",
-                  marginTop: 20,
-                  fontSize: 17
+                  marginTop: 10,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  alignSelf: "flex-start"
                 }}
               >
-                {this.state.msg}
-              </Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => this.setState({ loading: true }, this.login())}
-              style={styles.regButton}
-            >
-              {this.state.loading ? (
-                <ActivityIndicator size="large" color="white" />
-              ) : (
-                <Text style={styles.regButton1}> Login </Text>
-              )}
-            </TouchableOpacity>
-            <View style={{ flexDirection: "row", marginTop: 15 }}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("ForgotPassword")}
-              >
-                <Text style={styles.reg}>Forgot password?</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={{ alignItems: "center" }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text style={styles.reg1}> Don't have an account? </Text>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("SignUp")}
-              >
-                <Text style={styles.reg}>Register</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+                <CheckBox
+                  onPress={() =>
+                    this.setState({ checked: !this.state.checked })
+                  }
+                  style={{ marginRight: 20 }}
+                  checked={this.state.checked}
+                  color="#ff1358"
+                />
+                <Text style={{ color: "white", fontSize: 15 }}>
+                  Remember Me{" "}
+                </Text>
+                <Text style={{ color: "white", fontSize: 12 }}>
+                  {" "}
+                  (Requires 4 digit pin)
+                </Text>
+              </View>
+              <View>
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    color: "#ff1358",
+                    marginTop: 20,
+                    fontSize: 17
+                  }}
+                >
+                  {this.state.msg}
+                </Text>
+              </View>
 
-          {/* <Button
-                            title="Go to Sign up"
-                            onPress={() => this.props.navigation.navigate('SignUp')}
-                        /> */}
+              <TouchableOpacity
+                onPress={() => this.setState({ loading: true }, this.login())}
+                style={styles.regButton}
+              >
+                {this.state.loading ? (
+                  <ActivityIndicator size="large" color="white" />
+                ) : (
+                  <Text style={styles.regButton1}> Login </Text>
+                )}
+              </TouchableOpacity>
+              <View style={{ flexDirection: "row", marginTop: 15 }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate("ForgotPassword")
+                  }
+                >
+                  <Text style={styles.reg}>Forgot password?</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={{ alignItems: "center" }}>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={styles.reg1}> Don't have an account? </Text>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate("SignUp")}
+                >
+                  <Text style={styles.reg}>Register</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+            
+          )}
         </KeyboardAwareScrollView>
       </ImageBackground>
     );

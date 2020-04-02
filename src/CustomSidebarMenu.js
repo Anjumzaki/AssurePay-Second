@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Image, Text,  } from 'react-native';
 import { TouchableOpacity, } from 'react-native-gesture-handler';
+import { NavigationActions, StackActions } from "react-navigation";
 
 export default class CustomSidebarMenu extends Component {
   constructor() {
@@ -111,6 +112,42 @@ export default class CustomSidebarMenu extends Component {
               </View>
             </TouchableOpacity>
           ))}
+             <TouchableOpacity onPress={() => {
+                 this.props.navigation.dispatch(
+                  StackActions.reset({
+                    index: 0,
+                    actions: [
+                      NavigationActions.navigate({
+                        routeName: "Login"
+                      })
+                    ]
+                  })
+                );
+            }}
+              >
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                  backgroundColor: '#ffffff',
+                }}
+
+              >
+                <View style={{ marginRight: 10, marginLeft: 20 }}>
+                  <Image source={require('../assets/newICons/unnamed.png')} style={{ width: 30, height: 30 }} color="#808080" />
+                </View>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    color:  'black',
+                  }}
+                >
+                  Logout
+                </Text>
+              </View>
+            </TouchableOpacity>
         </View>
       </View>
     );

@@ -6,7 +6,8 @@ import {
   TextInput,
   Dimensions,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
+  AsyncStorage
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -31,27 +32,44 @@ class Login extends React.Component {
       confirmPass: "",
       msg: "",
       loading: false,
-      fontLoaded: false
+      fontLoaded: false,
+      pin:''
     };
   }
-
+  handlePin = (pin) => {
+    if(this.state.pin.length < 3){
+      this.setState({pin})
+    }
+    else if(this.state.pin.length == 3){
+      this.setState({pin})
+    }
+    else if (pin.length < 4) {
+      this.setState({pin})
+    }
+  }
   signup() {
-   
     if (this.state.userName) {
       if (this.state.userName.length > 5) {
         if (this.state.email) {
           if (validator.validate(this.state.email)) {
             if (this.state.Password) {
               if (this.state.Password == this.state.confirmPass) {
+                if(this.state.pin) {
+                  AsyncStorage.setItem('pin', this.state.pin);
+                  AsyncStorage.setItem('user', this.state.userName);
+
+                  AsyncStorage.setItem('pass', this.state.Password);
+                  AsyncStorage.setItem('checked', 'false');
+
                 axios
                   .post("https://intense-harbor-45607.herokuapp.com/register", {
                     userName: this.state.userName,
                     email: this.state.email,
-                    password: this.state.Password
+                    password: this.state.Password,
+                    pin:this.state.pin,
                   })
                   .then(response => {
                     this.props.userAsync(response.data.response._id);
-
                     if (response.data.resp === "registered") {
                       this.props.navigation.navigate("MainTabs");
                       this.props.navigation.dispatch(
@@ -70,9 +88,17 @@ class Login extends React.Component {
                     }
                   })
                   .catch(error => {
-                    this.setState({ msg: "signup info is incorrect" });
+                    console.log(error)
+                    this.setState({ msg: "Username already exists" });
                   });
-              } else {
+              } 
+             else {
+              this.setState({
+                msg:'please enter 4 digit pin'
+              })
+            }
+          }
+              else {
                 this.setState({
                   msg: "Confirm Password is not same"
                 });
@@ -153,6 +179,7 @@ class Login extends React.Component {
                 secureTextEntry={true}
               />
             </View>
+            
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.forms}
@@ -162,6 +189,16 @@ class Login extends React.Component {
                 keyboardType="default"
                 returnKeyType="next"
                 secureTextEntry={true}
+              />
+            </View>
+            <View style={styles.SectionStyle}>
+              <TextInput
+                style={styles.forms}
+                onChangeText={pin => this.handlePin(pin)}
+                value={this.state.pin}
+                placeholder="4 Digits Pin for Quick Login"
+                keyboardType="number-pad"
+                returnKeyType="next"
               />
             </View>
             <View>
