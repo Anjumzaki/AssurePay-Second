@@ -57,10 +57,8 @@ class Login extends React.Component {
                 if(this.state.pin) {
                   AsyncStorage.setItem('pin', this.state.pin);
                   AsyncStorage.setItem('user', this.state.userName);
-
                   AsyncStorage.setItem('pass', this.state.Password);
                   AsyncStorage.setItem('checked', 'false');
-
                 axios
                   .post("https://intense-harbor-45607.herokuapp.com/register", {
                     userName: this.state.userName,

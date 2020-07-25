@@ -8,7 +8,7 @@ import {
   Alert,
   Platform,
   ActivityIndicator,
-  DatePickerIOS
+  DatePickerIOS,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -20,10 +20,10 @@ import { bindActionCreators } from "redux";
 import { userAsync } from "../store/actions";
 import { connect } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
-import { Icon, Picker } from "native-base";
+import { Icon, Picker, Row } from "native-base";
 class MainScreen extends React.Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
   constructor(props) {
     super(props);
@@ -51,7 +51,7 @@ class MainScreen extends React.Component {
       soldDate: "",
       userId: "",
       loading: false,
-      showDate: false
+      showDate: false,
     };
   }
   login() {
@@ -59,7 +59,7 @@ class MainScreen extends React.Component {
     this.props.navigation.dispatch(
       StackActions.reset({
         index: 0,
-        actions: [NavigationActions.navigate({ routeName: "MainTabs" })]
+        actions: [NavigationActions.navigate({ routeName: "MainTabs" })],
       })
     );
   }
@@ -80,7 +80,7 @@ class MainScreen extends React.Component {
           "/" +
           month.toString()
       )
-      .then(resp => {
+      .then((resp) => {
         if (resp.data !== null) {
           this.setState({
             commPer: resp.data.commission,
@@ -88,14 +88,13 @@ class MainScreen extends React.Component {
             pmdDeductionPer: resp.data.pmdDeduction,
             commType: resp.data.commType,
             bonusType: resp.data.bonusType,
-            pmdType: resp.data.pmdDeductionType
+            pmdType: resp.data.pmdDeductionType,
           });
         }
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
-  saveTrasc = navigation => {
-   
+  saveTrasc = (navigation) => {
     if (
       this.state.payDate &&
       // this.state.soldDate &&
@@ -122,9 +121,9 @@ class MainScreen extends React.Component {
           commission: this.state.commission ? this.state.commission : 0,
           bonus: this.state.bonus ? this.state.bonus : 0,
           pmdDeduction: this.state.pmdDeduction,
-          userId: this.props.user
+          userId: this.props.user,
         })
-        .then(resp => {
+        .then((resp) => {
           if (resp.status == 200) {
             Alert.alert(
               "Actions",
@@ -132,8 +131,8 @@ class MainScreen extends React.Component {
               [
                 {
                   text: "Okay",
-                  onPress: () => navigation.navigate("HomePage")
-                }
+                  onPress: () => navigation.navigate("HomePage"),
+                },
               ],
               { cancelable: true }
             );
@@ -141,7 +140,7 @@ class MainScreen extends React.Component {
             Alert.alert("Something Went Wrong!");
           }
         })
-        .catch(err => Alert.alert("Something Went Wrong!"));
+        .catch((err) => Alert.alert("Something Went Wrong!"));
     } else {
       if (!this.state.payDate) {
         this.setState({ msg: "Please Select PayDate Date" });
@@ -156,7 +155,7 @@ class MainScreen extends React.Component {
       }
     }
     this.setState({
-      loading: false
+      loading: false,
     });
   };
   render() {
@@ -184,6 +183,20 @@ class MainScreen extends React.Component {
       <KeyboardAwareScrollView enableOnAndroid={true}>
         <View style={{ flex: 1, alignItems: "center", marginTop: 10 }}>
           <View style={styles.SectionStyle}>
+            <Text
+              style={{
+                position: "absolute",
+                backgroundColor: "white",
+                elevation: 1,
+                zIndex: 1,
+                paddingHorizontal: 10,
+                paddingVertical: 2,
+                marginLeft: 20,
+                left: 5,
+              }}
+            >
+              Sale Date
+            </Text>
             <TextInput
               style={styles.forms}
               value={this.state.soldDate.dateString}
@@ -192,14 +205,16 @@ class MainScreen extends React.Component {
               returnKeyType="next"
             />
           </View>
-          {Platform.OS == "android" ? null : (
-            <Text style={{ marginTop: 15 }}>Pay Date</Text>
-          )}
 
           {Platform.OS == "android" ? (
-            <View style={styles.SectionStyle}>
+            <View
+              style={[
+                styles.SectionStyle,
+                { justifyContent: "space-between", paddingHorizontal: 10 },
+              ]}
+            >
               <DatePicker
-                style={[styles.forms, { paddingTop: -5 }]}
+                style={[styles.forms, { paddingTop: -5, width: "65%" }]}
                 date={
                   this.state.payDate
                     ? this.state.payDate
@@ -219,11 +234,11 @@ class MainScreen extends React.Component {
                     left: 0,
                     top: 0,
                     bottom: 5,
-                    marginLeft: 0
+                    marginLeft: 0,
                   },
                   dateText: {
                     fontSize: 19,
-                    color: "black"
+                    color: "black",
                   },
                   dateInput: {
                     borderWidth: 0,
@@ -231,23 +246,36 @@ class MainScreen extends React.Component {
                     alignItems: "flex-start",
                     color: "black",
                     position: "relative",
-                    paddingBottom: 8
+                    paddingBottom: 8,
                   },
                   dateTouchBody: {
-                    color: "black"
+                    color: "black",
                   },
                   placeholderText: {
                     fontSize: 19,
-                    color: "gray"
-                  }
+                    color: "gray",
+                  },
                 }}
-                onDateChange={payDate => {
+                onDateChange={(payDate) => {
                   this.setState({ payDate: payDate });
                 }}
               />
             </View>
           ) : (
-            <View style={{ marginBottom: -10 }}>
+            <View style={{ marginVertical: 10 }}>
+              <Text
+                style={{
+                  position: "absolute",
+                  backgroundColor: "white",
+                  elevation: 1,
+                  zIndex: 1,
+                  paddingHorizontal: 10,
+                  paddingVertical: 2,
+                  marginLeft: 20,
+                }}
+              >
+                PayDate
+              </Text>
               <TouchableOpacity
                 onPress={() => this.setState({ showDate: true })}
                 style={(styles.SectionStyle, [{}])}
@@ -274,7 +302,7 @@ class MainScreen extends React.Component {
                   customStyles={{
                     dateText: {
                       fontSize: 19,
-                      color: "black"
+                      color: "black",
                     },
                     dateInput: {
                       borderWidth: 0,
@@ -282,17 +310,17 @@ class MainScreen extends React.Component {
 
                       color: "black",
 
-                      paddingBottom: 0
+                      paddingBottom: 0,
                     },
                     dateTouchBody: {
-                      color: "black"
+                      color: "black",
                     },
                     placeholderText: {
                       fontSize: 19,
-                      color: "gray"
-                    }
+                      color: "gray",
+                    },
                   }}
-                  onDateChange={payDate => {
+                  onDateChange={(payDate) => {
                     this.setState({ payDate });
                   }}
                 />
@@ -312,7 +340,7 @@ class MainScreen extends React.Component {
           <View style={styles.SectionStyle}>
             <TextInput
               style={styles.forms}
-              onChangeText={name => this.setState({ name })}
+              onChangeText={(name) => this.setState({ name })}
               value={this.state.name}
               placeholder="Name"
               keyboardType="default"
@@ -320,9 +348,23 @@ class MainScreen extends React.Component {
             />
           </View>
           <View style={styles.SectionStyle}>
+            <Text
+              style={{
+                position: "absolute",
+                backgroundColor: "white",
+                elevation: 1,
+                zIndex: 1,
+                paddingHorizontal: 10,
+                paddingVertical: 2,
+                marginLeft: 20,
+                left: 5,
+              }}
+            >
+              Contract#
+            </Text>
             <TextInput
               style={styles.forms}
-              onChangeText={contact => this.setState({ contact })}
+              onChangeText={(contact) => this.setState({ contact })}
               value={this.state.contact}
               placeholder="Contract#"
               keyboardType="default"
@@ -332,7 +374,7 @@ class MainScreen extends React.Component {
           <View style={styles.SectionStyle}>
             <TextInput
               style={styles.forms}
-              onChangeText={volume => {
+              onChangeText={(volume) => {
                 this.setState({ volume });
               }}
               value={this.state.volume}
@@ -369,7 +411,7 @@ class MainScreen extends React.Component {
                   if (this.state.commission < 0) {
                     this.setState({
                       pmdDeductionPer: 0,
-                      msg: "Commission cannot be less than zero"
+                      msg: "Commission cannot be less than zero",
                     });
                   }
                 } else {
@@ -383,7 +425,7 @@ class MainScreen extends React.Component {
           <View style={styles.SectionStyle}>
             <TextInput
               style={styles.forms}
-              onChangeText={downPay => this.setState({ downPay })}
+              onChangeText={(downPay) => this.setState({ downPay })}
               value={this.state.downPay}
               placeholder="Downpayment %"
               keyboardType="decimal-pad"
@@ -393,7 +435,7 @@ class MainScreen extends React.Component {
           <View style={styles.SectionStyle}>
             <TextInput
               style={styles.forms}
-              onChangeText={note => this.setState({ note })}
+              onChangeText={(note) => this.setState({ note })}
               value={this.state.note}
               placeholder="Note "
               keyboardType="default"
@@ -407,7 +449,7 @@ class MainScreen extends React.Component {
                 <View
                   style={{
                     width: 80,
-                    height: 50
+                    height: 50,
                   }}
                 >
                   <RNPickerSelect
@@ -416,19 +458,19 @@ class MainScreen extends React.Component {
                       this.setState({
                         spiffType: itemValue,
                         spiff: "",
-                        spiffPer: ""
+                        spiffPer: "",
                       })
                     }
                     items={[
                       { label: "%", value: "%" },
-                      { label: "Fixed", value: "Fixed" }
+                      { label: "Fixed", value: "Fixed" },
                     ]}
                   />
                 </View>
 
                 <TextInput
                   style={{ width: 100, padding: 10 }}
-                  onChangeText={spiffPer => {
+                  onChangeText={(spiffPer) => {
                     var calc;
                     if (this.state.spiffType === "%") {
                       calc = (spiffPer * this.state.volume) / 100;
@@ -451,27 +493,27 @@ class MainScreen extends React.Component {
                 <View
                   style={{
                     width: 80,
-                    height: 50
+                    height: 50,
                   }}
                 >
                   <RNPickerSelect
                     value={this.state.commType}
                     items={[
                       { label: "%", value: "%" },
-                      { label: "Fixed", value: "Fixed" }
+                      { label: "Fixed", value: "Fixed" },
                     ]}
                     onValueChange={(itemValue, itemIndex) =>
                       this.setState({
                         commType: itemValue,
                         commission: "",
-                        commPer: ""
+                        commPer: "",
                       })
                     }
                   />
                 </View>
                 <TextInput
                   style={{ width: 100, padding: 10 }}
-                  onChangeText={commPer => {
+                  onChangeText={(commPer) => {
                     var calc;
                     if (this.state.commType === "%") {
                       calc = (commPer * this.state.volume) / 100;
@@ -481,7 +523,7 @@ class MainScreen extends React.Component {
                     this.setState({
                       commPer,
                       commission: calc,
-                      commission1: calc
+                      commission1: calc,
                     });
                   }}
                   value={Math.round(this.state.commPer)}
@@ -501,7 +543,7 @@ class MainScreen extends React.Component {
                 <View
                   style={{
                     width: 80,
-                    height: 50
+                    height: 50,
                   }}
                 >
                   <RNPickerSelect
@@ -510,18 +552,18 @@ class MainScreen extends React.Component {
                       this.setState({
                         bonusType: itemValue,
                         bonus: "",
-                        bonusPer: ""
+                        bonusPer: "",
                       })
                     }
                     items={[
                       { label: "%", value: "%" },
-                      { label: "Fixed", value: "Fixed" }
+                      { label: "Fixed", value: "Fixed" },
                     ]}
                   />
                 </View>
                 <TextInput
                   style={{ width: 100, padding: 10 }}
-                  onChangeText={bonusPer => {
+                  onChangeText={(bonusPer) => {
                     var calc;
                     if (this.state.bonusType === "%") {
                       calc = (bonusPer * this.state.volume) / 100;
@@ -547,14 +589,14 @@ class MainScreen extends React.Component {
                     width: 80,
                     height: 50,
                     textAlign: "right",
-                    justifyContent: "flex-end"
+                    justifyContent: "flex-end",
                   }}
                 >
                   <RNPickerSelect
                     value={this.state.pmdType}
                     items={[
                       { label: "%", value: "%" },
-                      { label: "Fixed", value: "Fixed" }
+                      { label: "Fixed", value: "Fixed" },
                     ]}
                     onValueChange={(itemValue, itemIndex) =>
                       this.setState({ pmdType: itemValue })
@@ -563,26 +605,26 @@ class MainScreen extends React.Component {
                 </View>
                 <TextInput
                   style={{
-                    textAlign: "center"
+                    textAlign: "center",
                   }}
                   placeholderText={{ fontSize: 10 }}
-                  onChangeText={pmdDeductionPer => {
+                  onChangeText={(pmdDeductionPer) => {
                     var calc;
                     if (this.state.pmdType === "%") {
                       calc = (pmdDeductionPer * this.state.volume) / 100;
                       this.setState({
-                        commission: this.state.commission1 - calc
+                        commission: this.state.commission1 - calc,
                       });
                       if (this.state.commission < 0) {
                         this.setState({
                           pmdDeductionPer: 0,
-                          msg: "Commission cannot be less than zero"
+                          msg: "Commission cannot be less than zero",
                         });
                       }
                     } else {
                       calc = pmdDeductionPer;
                       this.setState({
-                        commission: this.state.commission1 - calc
+                        commission: this.state.commission1 - calc,
                       });
                     }
                     this.setState({ pmdDeductionPer, pmdDeduction: calc });
@@ -607,7 +649,7 @@ class MainScreen extends React.Component {
                 <View
                   style={{
                     height: 50,
-                    justifyContent: "center"
+                    justifyContent: "center",
                   }}
                 >
                   <Picker
@@ -615,11 +657,11 @@ class MainScreen extends React.Component {
                     iosHeader="Select Type"
                     iosIcon={<Icon name="arrow-down"></Icon>}
                     selectedValue={this.state.spiffType}
-                    onValueChange={itemValue =>
+                    onValueChange={(itemValue) =>
                       this.setState({
                         spiffType: itemValue,
                         spiff: "",
-                        spiffPer: ""
+                        spiffPer: "",
                       })
                     }
                   >
@@ -629,7 +671,7 @@ class MainScreen extends React.Component {
                 </View>
                 <TextInput
                   style={{ width: 100, padding: 10 }}
-                  onChangeText={spiffPer => {
+                  onChangeText={(spiffPer) => {
                     var calc;
                     if (this.state.spiffType === "%") {
                       calc = (spiffPer * this.state.volume) / 100;
@@ -652,7 +694,7 @@ class MainScreen extends React.Component {
                 <View
                   style={{
                     height: 50,
-                    justifyContent: "center"
+                    justifyContent: "center",
                   }}
                 >
                   <Picker
@@ -660,11 +702,11 @@ class MainScreen extends React.Component {
                     iosHeader="Select Type"
                     iosIcon={<Icon name="arrow-down"></Icon>}
                     selectedValue={this.state.commType}
-                    onValueChange={itemValue =>
+                    onValueChange={(itemValue) =>
                       this.setState({
                         commType: itemValue,
                         commission: "",
-                        commPer: ""
+                        commPer: "",
                       })
                     }
                   >
@@ -674,7 +716,7 @@ class MainScreen extends React.Component {
                 </View>
                 <TextInput
                   style={{ width: 100, padding: 10 }}
-                  onChangeText={commPer => {
+                  onChangeText={(commPer) => {
                     var calc;
                     if (this.state.commType === "%") {
                       calc = (commPer * this.state.volume) / 100;
@@ -684,7 +726,7 @@ class MainScreen extends React.Component {
                     this.setState({
                       commPer,
                       commission: calc,
-                      commission1: calc
+                      commission1: calc,
                     });
                   }}
                   value={Math.round(this.state.commPer)}
@@ -704,7 +746,7 @@ class MainScreen extends React.Component {
                 <View
                   style={{
                     height: 50,
-                    justifyContent: "center"
+                    justifyContent: "center",
                   }}
                 >
                   <Picker
@@ -712,11 +754,11 @@ class MainScreen extends React.Component {
                     iosHeader="Select Type"
                     iosIcon={<Icon name="arrow-down"></Icon>}
                     selectedValue={this.state.bonusType}
-                    onValueChange={itemValue =>
+                    onValueChange={(itemValue) =>
                       this.setState({
                         bonusType: itemValue,
                         bonus: "",
-                        bonusPer: ""
+                        bonusPer: "",
                       })
                     }
                   >
@@ -726,7 +768,7 @@ class MainScreen extends React.Component {
                 </View>
                 <TextInput
                   style={{ width: 100, padding: 10 }}
-                  onChangeText={bonusPer => {
+                  onChangeText={(bonusPer) => {
                     var calc;
                     if (this.state.bonusType === "%") {
                       calc = (bonusPer * this.state.volume) / 100;
@@ -751,7 +793,7 @@ class MainScreen extends React.Component {
                   style={{
                     height: 50,
 
-                    justifyContent: "center"
+                    justifyContent: "center",
                   }}
                 >
                   <Picker
@@ -759,9 +801,9 @@ class MainScreen extends React.Component {
                     iosHeader="Select Type"
                     iosIcon={<Icon name="arrow-down"></Icon>}
                     selectedValue={this.state.pmdType}
-                    onValueChange={itemValue =>
+                    onValueChange={(itemValue) =>
                       this.setState({
-                        pmdType: itemValue
+                        pmdType: itemValue,
                       })
                     }
                   >
@@ -771,26 +813,26 @@ class MainScreen extends React.Component {
                 </View>
                 <TextInput
                   style={{
-                    textAlign: "center"
+                    textAlign: "center",
                   }}
                   placeholderText={{ fontSize: 10 }}
-                  onChangeText={pmdDeductionPer => {
+                  onChangeText={(pmdDeductionPer) => {
                     var calc;
                     if (this.state.pmdType === "%") {
                       calc = (pmdDeductionPer * this.state.volume) / 100;
                       this.setState({
-                        commission: this.state.commission1 - calc
+                        commission: this.state.commission1 - calc,
                       });
                       if (this.state.commission < 0) {
                         this.setState({
                           pmdDeductionPer: 0,
-                          msg: "Commission cannot be less than zero"
+                          msg: "Commission cannot be less than zero",
                         });
                       }
                     } else {
                       calc = pmdDeductionPer;
                       this.setState({
-                        commission: this.state.commission1 - calc
+                        commission: this.state.commission1 - calc,
                       });
                     }
                     this.setState({ pmdDeductionPer, pmdDeduction: calc });
@@ -820,7 +862,7 @@ class MainScreen extends React.Component {
               onPress={() =>
                 this.setState(
                   {
-                    loading: true
+                    loading: true,
                   },
                   this.saveTrasc(this.props.navigation)
                 )
@@ -842,9 +884,10 @@ const styles = StyleSheet.create({
   SectionStyle: {
     flexDirection: "row",
     justifyContent: "center",
-
-    height: 35,
-    margin: 10
+    width: "100%",
+    margin: 10,
+    marginBottom: 5,
+    marginTop: 5,
   },
 
   forms: {
@@ -857,7 +900,7 @@ const styles = StyleSheet.create({
     color: "black",
     borderRadius: 10,
     marginTop: 10,
-    height: 45
+    height: 45,
   },
 
   commSection: {
@@ -865,7 +908,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
   saveBtn: {
     paddingTop: 10,
@@ -875,29 +918,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#3f3fb9",
     color: "white",
     borderRadius: 10,
-    marginBottom: 30
+    marginBottom: 30,
   },
   pickerIos: {
     ...Platform.select({
       ios: {
-        width: 60
-      }
-    })
+        width: 60,
+      },
+    }),
   },
   perText: {
     fontWeight: "bold",
     marginRight: 10,
-    minWidth: 75
-  }
+    minWidth: 75,
+  },
 });
 
-const mapStateToProps = state => ({
-  user: state.user.userId
+const mapStateToProps = (state) => ({
+  user: state.user.userId,
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
     {
-      userAsync
+      userAsync,
     },
     dispatch
   );

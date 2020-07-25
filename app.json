@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "7.4.1",
+    "version": "7.8.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -27,12 +27,13 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.sposieapps.AssurePay",
       "infoPlist": {
-        "NSCameraUsageDescription": "This app uses camera to have the option to add a photo as a background or wallpaper."
+        "NSCameraUsageDescription": "This app uses camera to have the option to add a photo as a background or wallpaper.",
+        "NSPhotoLibraryUsageDescription" : "This app uses photos to have the option to add a photo as a background or wallpaper."
       }
     },
     "android": {
       "package": "com.sposieapps.AssurePay",
-      "versionCode": 6,
+      "versionCode": 12,
       "permissions": [
         "CAMERA",
         "RECORD_AUDIO",

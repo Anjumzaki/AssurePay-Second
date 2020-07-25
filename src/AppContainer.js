@@ -22,6 +22,8 @@ import Account from './Screens/Account'
 import ChangeMonthlyGoal from './Screens/ChangeMonthlyGoal'
 import ChangeMonthlyBonus from './Screens/ChangeMonthlyBonus'
 import EditTrans from './Screens/EditTrans'
+import ForgotPin from './Screens/ForgotPin'
+
 const TransStack = createStackNavigator(
     {
         HomePage: HomePage,
@@ -70,6 +72,7 @@ const RootStack = createStackNavigator(
         ChangePassword: ChangePassword,
         ForgotPassword: ForgotPassword,
         MainTabs: DrawerNavigator,
+        ForgotPin:ForgotPin
 
     },
     {
