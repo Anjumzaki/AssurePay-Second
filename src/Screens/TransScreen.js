@@ -110,7 +110,9 @@ class MainScreen extends React.Component {
     ) {
       axios
         .post("https://intense-harbor-45607.herokuapp.com/post/transaction", {
-          payDate: this.state.payDate,
+          payDate: this.state.payDate
+            ? this.state.payDate
+            : this.state.soldDate.dateString,
           soldDate: this.state.soldDate.dateString,
           name: this.state.name,
           contact: this.state.contact,
@@ -142,9 +144,7 @@ class MainScreen extends React.Component {
         })
         .catch((err) => Alert.alert("Something Went Wrong!"));
     } else {
-      if (!this.state.payDate) {
-        this.setState({ msg: "Please Select PayDate Date" });
-      } else if (!this.state.name) {
+      if (!this.state.name) {
         this.setState({ msg: "Please Enter Name" });
       } else if (!this.state.contact) {
         this.setState({ msg: "Please Enter Contract #" });
@@ -178,7 +178,6 @@ class MainScreen extends React.Component {
         pay = this.state.soldDate.dateString;
       }
     }
-
     return (
       <KeyboardAwareScrollView enableOnAndroid={true}>
         <View style={{ flex: 1, alignItems: "center", marginTop: 10 }}>
@@ -348,20 +347,6 @@ class MainScreen extends React.Component {
             />
           </View>
           <View style={styles.SectionStyle}>
-            <Text
-              style={{
-                position: "absolute",
-                backgroundColor: "white",
-                elevation: 1,
-                zIndex: 1,
-                paddingHorizontal: 10,
-                paddingVertical: 2,
-                marginLeft: 20,
-                left: 5,
-              }}
-            >
-              Contract#
-            </Text>
             <TextInput
               style={styles.forms}
               onChangeText={(contact) => this.setState({ contact })}
